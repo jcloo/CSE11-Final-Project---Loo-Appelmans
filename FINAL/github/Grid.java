@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import objectdraw.*;
 
 /**
@@ -26,10 +25,14 @@ public class Grid extends ActiveObject implements MouseListener {
   public static void setCellStatus(int[][] Gen, int cellSize, DrawingCanvas canvas) {
 	  for(int i = 0; i < Gen.length; i++) {
 		  for(int j = 0; j < Gen[i].length; j++) {
-			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
 			  if(Gen[i][j] == 1) {
 				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
 			  }
+			  else {
+				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
+				  status.setColor(Color.WHITE);
+			  }
+			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
 		  }
 	  }
   }

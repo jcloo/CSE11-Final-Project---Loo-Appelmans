@@ -13,11 +13,11 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	// implements ActionListener
 	private JButton run = new JButton("Run");
 	private JButton pause = new JButton("Pause");
-	private JButton clear = new JButton("Clear All");
+	private JButton restart = new JButton("Restart");
 	
 	//slider object to change speed
 	//implements ChangeListener
-	private double speed = 50.0;
+	private static double speed = 50.0;
 	private JSlider speedSlider = new JSlider();
 	private JLabel speedLabel;
 	
@@ -49,7 +49,7 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  //adds objects (buttons/sliders/labels) to panel, panel3
 	  panel2.add(run);
 	  panel2.add(pause);
-	  panel2.add(clear);
+	  panel2.add(restart);
 	  panel.add(panel2);
 	  panel3.add(speedLabel);
 	  panel3.add(speedSlider);
@@ -58,7 +58,7 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  //needs ActionListener or MouseListener (?) for Grid
 	  run.addActionListener(this);
 	  pause.addActionListener(this);
-	  clear.addActionListener(this);
+	  restart.addActionListener(this);
 	  speedSlider.addChangeListener(this);
 	  
 	  //adds panels onto top and bottom of frame
@@ -70,7 +70,7 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  //Initialize next matrix
 	  Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
 	  
-	  //Create new Grid Display  
+	//Create new Grid Display  
 	  Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);
 			  
 		 
@@ -79,51 +79,58 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  this.validate();
   }
 
+
+// says what the buttons will do
+  @Override
+  public void actionPerformed(ActionEvent arg0) {
+  	if(arg0.getSource() == run) {
+  		int tmpSpeed = speedSlider.getValue();
+  		setSpeed(tmpSpeed);
+  	}
+  	
+  	if (arg0.getSource() == pause) {
+  		setSpeed(0);
+  	}
+  	
+  	if (arg0.getSource() == restart) {
+  			// sets new generation - do not change
+  			Automata2D.createFirstGen(Automata2D.firstGen);
+  		    //Create new Grid Display  
+  		    Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);				  
+  	}
+  	
+  } // end of ActionPerformed
+
 //Used for slider - changes speed of program
 @Override
 public void stateChanged(ChangeEvent arg0) {
-	// will not work until Grid.java is updated
-	speed = speedSlider.getValue();
-	speedLabel.setText("Speed: " + speed);
-	
+	setSpeed(speedSlider.getValue());
+	speedLabel.setText("Speed: " + getSpeed());
+}  
+
+public static double getSpeed() {
+	return DrawnGrid.speed;
 }
-    
-// methods to be overwritten  
-  
+
+public void setSpeed(double speed) {
+	DrawnGrid.speed = speed;
+}
+
+// NONE OF THESE NEEDED YET!!!!!
 @Override
 public void mouseClicked(MouseEvent arg0) {
-	// TODO Auto-generated method stub
-	
 }
-
 @Override
 public void mouseEntered(MouseEvent e) {
-	// TODO Auto-generated method stub
-	
 }
-
 @Override
 public void mouseExited(MouseEvent e) {
-	// TODO Auto-generated method stub
-	
 }
-
 @Override
 public void mousePressed(MouseEvent e) {
-	// TODO Auto-generated method stub
-	
 }
-
 @Override
 public void mouseReleased(MouseEvent e) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
-	
 }
   
 } // end of class DrawnGrid
