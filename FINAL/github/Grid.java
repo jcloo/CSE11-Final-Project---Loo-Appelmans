@@ -10,7 +10,7 @@ import objectdraw.*;
  */
 
 
-public class Grid implements MouseListener{
+public class Grid extends ActiveObject implements MouseListener {
 	
 	public static boolean cellStatus = false;
 	
@@ -23,9 +23,15 @@ public class Grid implements MouseListener{
     }
   
 
-  public void setCellStatus() {
-	  // if alive, set cellStatus to true
-	  // else, set cellStatus to false
+  public static void setCellStatus(int[][] Gen, int cellSize, DrawingCanvas canvas) {
+	  for(int i = 0; i < Gen.length; i++) {
+		  for(int j = 0; j < Gen[i].length; j++) {
+			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
+			  if(Gen[i][j] == 1) {
+				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
+			  }
+		  }
+	  }
   }
   
   public void setCell() {
@@ -40,7 +46,6 @@ public class Grid implements MouseListener{
 // shows the FramedRect with a color representing if cell is dead/alive
   public void show() {
 	  fr.show();
-	  setCellStatus();
 	  setCell();
 	  status.show();
   }

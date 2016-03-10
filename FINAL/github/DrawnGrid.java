@@ -64,19 +64,16 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  //adds panels onto top and bottom of frame
 	  this.add(panel, BorderLayout.NORTH);
 	  this.add(panel3, BorderLayout.SOUTH);
-	  
 	 
-	  Automata2D.initializeArray();
-	  //Create new Grid 
-	  for(int i = 0; i < Automata2D.column; i++) {
-		  for(int j = 0; j < Automata2D.row; j++) {
-			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
-			  if(Automata2D.firstGen[i][j] == 1) {
-				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
-			  }
-		  }
-	  }		  
+	  //Initialize first matrix
+	  Automata2D.createFirstGen(Automata2D.firstGen);
+	  //Initialize next matrix
+	  Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
 	  
+	  //Create new Grid Display  
+	  Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);
+			  
+		 
 	  
 	  //necessary to complete layout - DO NOT CHANGE
 	  this.validate();
