@@ -28,6 +28,9 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	private final static int FRAME_WIDTH = 1000;
 	private final static int FRAME_HEIGHT = 1000;
 	
+	//Size of cells variable
+	private final int cellSize = 20;
+	
 	//TO-DO: is there anything needed for when Grid objects are drawn?
 	
   public static void main (String [] args) {
@@ -56,10 +59,24 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  run.addActionListener(this);
 	  pause.addActionListener(this);
 	  clear.addActionListener(this);
+	  speedSlider.addChangeListener(this);
 	  
 	  //adds panels onto top and bottom of frame
 	  this.add(panel, BorderLayout.NORTH);
 	  this.add(panel3, BorderLayout.SOUTH);
+	  
+	 
+	  Automata2D.initializeArray();
+	  //Create new Grid 
+	  for(int i = 0; i < Automata2D.column; i++) {
+		  for(int j = 0; j < Automata2D.row; j++) {
+			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
+			  if(Automata2D.firstGen[i][j] == 1) {
+				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
+			  }
+		  }
+	  }		  
+	  
 	  
 	  //necessary to complete layout - DO NOT CHANGE
 	  this.validate();

@@ -17,12 +17,12 @@ public class Grid implements MouseListener{
 	private FramedRect fr;
 	private FilledRect status;
 	
-  // ctor which defines what a Grid piece is
-  public Grid (int x, int y, int size, DrawingCanvas canvas) {
-	  fr = new FramedRect (x, y, size, size, canvas);
-	  status = new FilledRect(x, y, size -5 , size -5, canvas);
-  }
+    // ctor which defines what a Grid piece is
+    public Grid (int x, int y, int size, DrawingCanvas canvas) {
+       fr = new FramedRect (x, y, size, size, canvas);
+    }
   
+
   public void setCellStatus() {
 	  // if alive, set cellStatus to true
 	  // else, set cellStatus to false
