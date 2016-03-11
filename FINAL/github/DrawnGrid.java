@@ -4,7 +4,11 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import objectdraw.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
+
+//extends WindowController/JFrame - uncomment shit if using this
 public class DrawnGrid extends WindowController implements ActionListener,
                                                            ChangeListener,
                                                            MouseListener {
@@ -36,6 +40,11 @@ public class DrawnGrid extends WindowController implements ActionListener,
   public static void main (String [] args) {
 	// Runs the program with correct dimensions, DO NOT CHANGE
     new Acme.MainFrame(new DrawnGrid(), args, FRAME_WIDTH, FRAME_HEIGHT);
+	  
+	  //using JFrame instead of WindowController
+//	  DrawnGrid dg = new DrawnGrid();
+//	  dg.setVisible(true);
+//	  dg.begin();
   }
   
   public void begin() {
@@ -66,26 +75,84 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  this.add(panel3, BorderLayout.SOUTH);
 	 
 	  //Initialize first matrix
-	  Automata2D.createFirstGen(Automata2D.firstGen);
-	  //Initialize next matrix
-	  Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
 	  
-	//Create new Grid Display  
+	  Automata2D.createFirstGen(Automata2D.firstGen);
+	  
+	  //Create new Grid Display  
 	  Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);
 			  
 		 
 	  
 	  //necessary to complete layout - DO NOT CHANGE
 	  this.validate();
+
+	 // Grid.pause(1000);
+	//  this.canvas.clear();
   }
+
+  //how to override paint method?
+  //new Thread object (swing's invoke later method?) which is called in actionperformed
+  //or
+  //where is paint being called? find and insert before?
+  //or
+  //use JFrame from Swing? 
+@Override 
+public void paint(Graphics g) {
+	super.paint(g);
+	System.out.println("lol");
+}
 
 
 // says what the buttons will do
   @Override
   public void actionPerformed(ActionEvent arg0) {
   	if(arg0.getSource() == run) {
-  		int tmpSpeed = speedSlider.getValue();
-  		setSpeed(tmpSpeed);
+  		System.out.println("1");
+  		Thread t1 = new Thread(new Runnable() {
+  			public void run() {
+  				Runnable refresh = new Runnable() {
+  					public void run() {
+  						
+  						Calendar cal = Calendar.getInstance();
+  				        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+  				        System.out.println("Start");
+  				        System.out.println( sdf.format(cal.getTime()) );
+  				        
+  						System.out.println("run");
+  						//gets speed
+  						int tmpSpeed = speedSlider.getValue();
+  						setSpeed(tmpSpeed);
+  						
+  						//Initialize next matrix
+  						Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
+  						
+  						Grid.pause(3000); //should be Grid.pause(speed * x);
+  						System.out.println("test");
+  						
+  						//shows NextGen
+  						Grid.setCellStatus(Automata2D.nextGen, cellSize, canvas);
+  						
+  						//Set FirstGen = NextGen
+  						Automata2D.setNextGen(Automata2D.firstGen, Automata2D.nextGen);
+  						
+  						System.out.println("End");
+  				        System.out.println( sdf.format(cal.getTime()) );
+  						
+  					}
+  				};
+  				System.out.println("2");
+  				
+  				//fix for indefinitely
+  				int foo = 0;
+  				while(foo < 4) {
+  					SwingUtilities.invokeLater(refresh);
+  					foo++;
+  					Grid.pause(5000);
+  				}
+  			}
+  		});
+  		t1.start();
+  		System.out.println("Started");
   	}
   	
   	if (arg0.getSource() == pause) {

@@ -1,5 +1,6 @@
+import objectdraw.*;
 
-public class Automata2D {
+public class Automata2D extends ActiveObject {
 	
 	//Set the size of the matrix
 	static int row = 15;

@@ -21,12 +21,13 @@ public class Grid extends ActiveObject implements MouseListener {
        fr = new FramedRect (x, y, size, size, canvas);
     }
   
-
+// make new 2d array which holds the filledrects, this method should just change colors
   public static void setCellStatus(int[][] Gen, int cellSize, DrawingCanvas canvas) {
 	  for(int i = 0; i < Gen.length; i++) {
 		  for(int j = 0; j < Gen[i].length; j++) {
 			  if(Gen[i][j] == 1) {
 				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
+				  
 			  }
 			  else {
 				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
