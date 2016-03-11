@@ -22,6 +22,7 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	//slider object to change speed
 	//implements ChangeListener
 	private static double speed = 50.0;
+	private static double fakeSpeed = 0.0;
 	private JSlider speedSlider = new JSlider();
 	private JLabel speedLabel;
 	
@@ -34,6 +35,9 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	
 	//Size of cells variable
 	private final int cellSize = 20;
+	
+	//Boolean for pause button
+	private static boolean stop = false;
 	
 	//TO-DO: is there anything needed for when Grid objects are drawn?
 	
@@ -79,7 +83,7 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  Automata2D.createFirstGen(Automata2D.firstGen);
 	  
 	  //Create new Grid Display  
-	  Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);
+	  Grid.createBoard(Automata2D.firstGen, Automata2D.rectArray, cellSize, canvas);
 			  
 		 
 	  
@@ -90,16 +94,10 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	//  this.canvas.clear();
   }
 
-  //how to override paint method?
-  //new Thread object (swing's invoke later method?) which is called in actionperformed
-  //or
-  //where is paint being called? find and insert before?
-  //or
-  //use JFrame from Swing? 
+ 
 @Override 
 public void paint(Graphics g) {
 	super.paint(g);
-	System.out.println("lol");
 }
 
 
@@ -107,63 +105,54 @@ public void paint(Graphics g) {
   @Override
   public void actionPerformed(ActionEvent arg0) {
   	if(arg0.getSource() == run) {
-  		System.out.println("1");
   		Thread t1 = new Thread(new Runnable() {
   			public void run() {
   				Runnable refresh = new Runnable() {
   					public void run() {
-  						
-  						Calendar cal = Calendar.getInstance();
-  				        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-  				        System.out.println("Start");
-  				        System.out.println( sdf.format(cal.getTime()) );
   				        
-  						System.out.println("run");
-  						//gets speed
-  						int tmpSpeed = speedSlider.getValue();
-  						setSpeed(tmpSpeed);
   						
   						//Initialize next matrix
   						Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
   						
-  						Grid.pause(3000); //should be Grid.pause(speed * x);
-  						System.out.println("test");
-  						
   						//shows NextGen
-  						Grid.setCellStatus(Automata2D.nextGen, cellSize, canvas);
+  						Grid.setRectArray(Automata2D.nextGen, Automata2D.rectArray);
   						
   						//Set FirstGen = NextGen
   						Automata2D.setNextGen(Automata2D.firstGen, Automata2D.nextGen);
-  						
-  						System.out.println("End");
-  				        System.out.println( sdf.format(cal.getTime()) );
+
   						
   					}
   				};
-  				System.out.println("2");
+  			
   				
   				//fix for indefinitely
-  				int foo = 0;
-  				while(foo < 4) {
+  				
+  				while(true) {
+					//gets speed
+					fakeSpeed = 101 - speed;
+					
+					stop = false;
+					
   					SwingUtilities.invokeLater(refresh);
-  					foo++;
-  					Grid.pause(5000);
+  					Grid.pause(fakeSpeed);
   				}
   			}
   		});
   		t1.start();
-  		System.out.println("Started");
   	}
   	
   	if (arg0.getSource() == pause) {
+  		stop = true;
+  		while(stop) {
   		setSpeed(0);
+  		}
   	}
   	
   	if (arg0.getSource() == restart) {
   			// sets new generation - do not change
   			Automata2D.createFirstGen(Automata2D.firstGen);
   		    //Create new Grid Display  
-  		    Grid.setCellStatus(Automata2D.firstGen, cellSize, canvas);				  
+  		    Grid.createBoard(Automata2D.firstGen, Automata2D.rectArray, cellSize, canvas);				  
   	}
   	
   } // end of ActionPerformed

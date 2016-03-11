@@ -1,15 +1,18 @@
-import objectdraw.*;
+import objectdraw.FilledRect;
 
-public class Automata2D extends ActiveObject {
+public class Automata2D {
 	
 	//Set the size of the matrix
-	static int row = 15;
-	static int column = 25;
+	static int row = 30;
+	static int column = 30;
 	
 	//Create a new 2D array (First generation of cells)
 	static int [][] firstGen = new int[column][row];	
 	//Create next generation of cells
 	static int [][] nextGen = new int[column][row];
+	//Create an array to hold rectangle objects
+	static FilledRect[][] rectArray = new FilledRect[column][row];
+	
 	
 	//Initialize values in array 
 	//Sets each element equal to a random binary
@@ -55,7 +58,6 @@ public class Automata2D extends ActiveObject {
 				
 			}
 		}
-		
 		return nGen;
 	}
 

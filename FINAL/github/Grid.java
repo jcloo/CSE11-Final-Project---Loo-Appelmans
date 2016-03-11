@@ -16,24 +16,42 @@ public class Grid extends ActiveObject implements MouseListener {
 	private FramedRect fr;
 	private FilledRect status;
 	
+	
     // ctor which defines what a Grid piece is
     public Grid (int x, int y, int size, DrawingCanvas canvas) {
        fr = new FramedRect (x, y, size, size, canvas);
+       fr.setColor(Color.GREEN);
     }
   
-// make new 2d array which holds the filledrects, this method should just change colors
-  public static void setCellStatus(int[][] Gen, int cellSize, DrawingCanvas canvas) {
+
+  public static void createBoard(int[][] Gen, FilledRect[][] rect, int cellSize, DrawingCanvas canvas) {
 	  for(int i = 0; i < Gen.length; i++) {
 		  for(int j = 0; j < Gen[i].length; j++) {
 			  if(Gen[i][j] == 1) {
 				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
-				  
+				  status.setColor(Color.YELLOW);
+				  rect[i][j] = status;
 			  }
 			  else {
 				  FilledRect status = new FilledRect(i * cellSize, j * cellSize, cellSize , cellSize, canvas);
-				  status.setColor(Color.WHITE);
+				  status.setColor(Color.GREEN);
+				  rect[i][j] = status;
+
 			  }
 			  Grid g = new Grid(i * cellSize, j * cellSize, cellSize, canvas);
+			  
+		  }
+	  } 
+  }
+  
+  public static void setRectArray(int[][] Gen, FilledRect[][] rect) {
+	  for(int i = 0; i < Gen.length; i++) {
+		  for(int j = 0; j < Gen.length; j++) {
+			if(Gen[i][j] == 1) {
+				rect[i][j].setColor(Color.YELLOW);
+			} else {
+				rect[i][j].setColor(Color.GREEN);
+			}
 		  }
 	  }
   }
