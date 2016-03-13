@@ -1,0 +1,17 @@
+@name: Joel Loo, Madeleine Appelmans
+@email: jcloo@ucsd.edu, 
+@pid: a12623303,
+
+@file: Grid.java
+@compile:
+
+This file defined a Grid of cells, and sets the status of each cell
+(dead/alive). In the constructor
+
+@file: Automata2D.java
+@compile:
+
+@file: DrawnGrid.java
+@compile:
+@run:
+
