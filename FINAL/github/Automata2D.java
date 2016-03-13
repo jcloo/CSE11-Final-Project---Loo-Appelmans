@@ -1,5 +1,13 @@
 import objectdraw.FilledRect;
 
+/**
+ * Class holds the values of cells (alive or dead) and holds rules for how
+ * cells interact.
+ * @author Joel Loo, Madeleine Appelmans
+ * @email jcloo@ucsd.edu, mappelma@ucsd.edu
+ * @pid a12623303, a13101416
+ */
+
 public class Automata2D {
 	
 	//Set the size of the matrix
@@ -14,22 +22,26 @@ public class Automata2D {
 	static FilledRect[][] rectArray = new FilledRect[column][row];
 	
 	
-	//Initialize values in array 
-	//Sets each element equal to a random binary
+	/**
+	 * Initializes values in array, sets each element equal to a random binary.
+	 * @param fGen Represents the 2D array which will hold the values.
+	 */
 	public static void createFirstGen(int[][] fGen) {
+		//nested for loop
 		for(int i = 0; i < fGen.length; i++) {
 			for(int j = 0; j < fGen[i].length; j++) {
+				// sets to a random 1 or 0 value
 				fGen[i][j] = (int)(Math.random() * 2);	
 			}
 		}
-	}	
+	} //end of method createFirstGen	
 	
-	/**Creates next generation of cells based of first generation of cells
-	 *fGen = first generation
-	 *nGen = next generation
-	 *@return nGen
+	/**
+	 * Creates next generation of cells based of first generation of cells
+	 * @param fGen Previous generation of cells
+	 * @param nGen Next generation of cells
+	 * @return Returns nGen
 	 */
-	
 	public static int[][] createNextGen(int[][] fGen, int[][] nGen){
 		int sumNeighbor; //Keeps track of sum of neighbor cells
 		int r, c; //Used to get value of neighbor cells one away from cell
@@ -59,17 +71,19 @@ public class Automata2D {
 			}
 		}
 		return nGen;
-	}
+	} // end of method createNextGen
 
-		
-		//set one array equal to the nextGeneration
+	/**
+	 * Sets one array equal to the next array/next generation.
+	 * @param fGen Previous generation of values
+	 * @param nGen Next generation of values
+	 */
 	public static void setNextGen(int[][] fGen, int[][] nGen) {
 		for(int i = 0; i < column - 1; i++) {
 			for(int j = 0; j < row -1 ; j++) {
 				fGen[i][j] = nGen[i][j];
 			}
 		}
-	}
+	} // end of method setNextGen
 	
-}
-
+} // end of class Automata2D
