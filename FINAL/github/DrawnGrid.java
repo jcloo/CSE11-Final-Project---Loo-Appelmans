@@ -37,18 +37,16 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	private final int cellSize = 20;
 	
 	//Boolean for pause button
-	private static boolean stop = false;
+	private static boolean paused = false;
+	private static Thread t1;
+	private static Object lock = new Object();
 	
 	//TO-DO: is there anything needed for when Grid objects are drawn?
 	
   public static void main (String [] args) {
 	// Runs the program with correct dimensions, DO NOT CHANGE
     new Acme.MainFrame(new DrawnGrid(), args, FRAME_WIDTH, FRAME_HEIGHT);
-	  
-	  //using JFrame instead of WindowController
-//	  DrawnGrid dg = new DrawnGrid();
-//	  dg.setVisible(true);
-//	  dg.begin();
+  
   }
   
   public void begin() {
@@ -90,8 +88,6 @@ public class DrawnGrid extends WindowController implements ActionListener,
 	  //necessary to complete layout - DO NOT CHANGE
 	  this.validate();
 
-	 // Grid.pause(1000);
-	//  this.canvas.clear();
   }
 
  
@@ -105,15 +101,14 @@ public void paint(Graphics g) {
   @Override
   public void actionPerformed(ActionEvent arg0) {
   	if(arg0.getSource() == run) {
-  		Thread t1 = new Thread(new Runnable() {
+  		t1 = new Thread(new Runnable() {
   			public void run() {
   				Runnable refresh = new Runnable() {
   					public void run() {
-  				        
-  						
+  				   
   						//Initialize next matrix
   						Automata2D.createNextGen(Automata2D.firstGen, Automata2D.nextGen);
-  						
+  							
   						//shows NextGen
   						Grid.setRectArray(Automata2D.nextGen, Automata2D.rectArray);
   						
@@ -124,17 +119,12 @@ public void paint(Graphics g) {
   					}
   				};
   			
-  				
-  				//fix for indefinitely
-  				
   				while(true) {
 					//gets speed
-					fakeSpeed = 101 - speed;
-					
-					stop = false;
-					
+					fakeSpeed = 101 - speed;			
   					SwingUtilities.invokeLater(refresh);
   					Grid.pause(fakeSpeed);
+  					checkPause();
   				}
   			}
   		});
@@ -142,10 +132,12 @@ public void paint(Graphics g) {
   	}
   	
   	if (arg0.getSource() == pause) {
-  		stop = true;
-  		while(stop) {
-  		setSpeed(0);
-  		}
+  		paused = !paused;
+  		pause.setText(paused?"Resume":"Pause");
+        synchronized(lock) {
+    		lock.notifyAll();
+    	}
+    		 
   	}
   	
   	if (arg0.getSource() == restart) {
@@ -157,6 +149,22 @@ public void paint(Graphics g) {
   	
   } // end of ActionPerformed
 
+  //used to start and stop thread
+  public static void checkPause() {
+	  if(paused) {
+		  synchronized(lock) {
+	          while(paused) {
+	              try {
+	                  lock.wait();
+	              } catch(InterruptedException e) {
+	                  // nothing
+	              }
+	          }
+	      } 
+	  } 
+  }
+  
+  
 //Used for slider - changes speed of program
 @Override
 public void stateChanged(ChangeEvent arg0) {
